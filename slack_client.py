@@ -13,14 +13,14 @@ load_dotenv()
 
 bot_user_token = os.environ["BOT_USER_TOKEN"]
 client = WebClient(token=bot_user_token)
-# try:
-response = client.chat_postMessage(
-    channel="bot-safehouse",
-    text=":tada: How may I serve you master?"
-)
-# except SlackApiError as e:
-#     # You will get a SlackApiError if "ok" is False
-#     assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
+try:
+    response = client.chat_postMessage(
+        channel="bot-safehouse",
+        text=":tada: How may I serve you master?"
+    )
+except SlackApiError as e:
+    # You will get a SlackApiError if "ok" is False
+    assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
 
 
 # class SlackClient:
