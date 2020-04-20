@@ -47,11 +47,11 @@ class SlackClient:
         pass
 
     def run(self):
-        print("Waiting for things to happen ...")
+        print("Waiting for things to happen...")
         loop = self.future.get_loop()
-        # Wait forever
+        # Forever Waiting...
         loop.run_until_complete(self.future)
-        print("Done waiting for things. done-DONE!")
+        print("Things are now done happening.")
 
 
 def main(args):
@@ -62,7 +62,7 @@ def main(args):
 
 if __name__ == '__main__':
     main(sys.argv[1:])
-    print("Completed.")
+    print("Program Completed.")
 
 
 # bot_user_token = os.environ["BOT_USER_TOKEN"]
