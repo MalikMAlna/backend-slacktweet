@@ -5,31 +5,74 @@ see https://slack.dev/python-slackclient/
 """
 
 import os
+import sys
 from slack.web.client import WebClient
-from slack.errors import SlackApiError
+from slack.rtm.client import RTMClient
 from dotenv import load_dotenv
 
 load_dotenv()
 
-bot_user_token = os.environ["BOT_USER_TOKEN"]
-client = WebClient(token=bot_user_token)
-try:
-    response = client.chat_postMessage(
-        channel="bot-safehouse",
-        text=":tada: How may I serve you master?"
-    )
-except SlackApiError as e:
-    # You will get a SlackApiError if "ok" is False
-    assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
+BOT_NAME = "al-raasid"
 
 
-# class SlackClient:
-#     pass
+class SlackClient:
+    def __init__(self, bot_user_token, bot_id=None):
+        self.name = BOT_NAME
+        self.bot_id = bot_id
+        if not self.bot_id:
+            # Read the bot's id by calling auth.test
+            response = WebClient(token=bot_user_token).api_call('auth.test')
+            self.bot_id = response['user_id']
+            print(f"My bot_id is {self.bot_id}")
+
+        self.sc = RTMClient(token=bot_user_token, run_async=True)
+
+        # Connect our callback events to the RTM client
+        RTMClient.run_on(event="hello")(self.on_hello)
+        RTMClient.run_on(event="message")(self.on_message)
+        RTMClient.run_on(event="goodbye")(self.on_goodbye)
+
+        # startup our client event loop
+        self.future = self.sc.start()
+        self.at_bot = f'<@{self.bot_id}>'
+        print("Created new SlackClient Instance")
+
+    def on_hello(self, **payload):
+        pass
+
+    def on_message(self, **payload):
+        pass
+
+    def on_goodbye(self, **payload):
+        pass
+
+    def run(self):
+        print("Waiting for things to happen ...")
+        loop = self.future.get_loop()
+        # Wait forever
+        loop.run_until_complete(self.future)
+        print("Done waiting for things. done-DONE!")
 
 
-# def main():
-#     pass
+def main(args):
+    slackclient = SlackClient(
+        os.environ['BOT_USER_TOKEN'], os.environ['BOT_USER_ID'])
+    slackclient.run()
 
 
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main(sys.argv[1:])
+    print("Completed.")
+
+
+# bot_user_token = os.environ["BOT_USER_TOKEN"]
+# client = WebClient(token=bot_user_token)
+# try:
+#     response = client.chat_postMessage(
+#         channel="bot-safehouse",
+#         text=":tada: How may I serve you master?"
+#     )
+# except SlackApiError as e:
+#     # You will get a SlackApiError if "ok" is False
+#     assert e.response["error"]  # str like 'invalid_auth',
+# 'channel_not_found'
