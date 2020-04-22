@@ -38,10 +38,12 @@ class SlackClient:
         print("Created new SlackClient Instance")
 
     def on_hello(self, **payload):
-        pass
+        data = payload["data"]
+        print(data)
 
     def on_message(self, **payload):
-        pass
+        data = payload["data"]
+        print(data['text'])
 
     def on_goodbye(self, **payload):
         pass
