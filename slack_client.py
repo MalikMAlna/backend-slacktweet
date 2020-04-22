@@ -10,7 +10,7 @@ from slack.web.client import WebClient
 from slack.rtm.client import RTMClient
 from dotenv import load_dotenv
 import logging.config
-from logging import getLogger
+import logging
 import yaml
 
 load_dotenv()
@@ -28,7 +28,7 @@ def config_logger():
     with open('logging.yaml') as f:
         config = yaml.safe_load(f.read())
         logging.config.dictConfig(config)
-    return getLogger(__name__)
+    return logging.getLogger(__name__)
 
 
 logger = config_logger()
@@ -42,7 +42,7 @@ class SlackClient:
             # Read the bot's id by calling auth.test
             response = WebClient(token=bot_user_token).api_call('auth.test')
             self.bot_id = response['user_id']
-            print(f"My bot_id is {self.bot_id}")
+            logger.info(f"My bot_id is {self.bot_id}")
 
         self.sc = RTMClient(token=bot_user_token, run_async=True)
 
@@ -58,21 +58,21 @@ class SlackClient:
 
     def on_hello(self, **payload):
         data = payload["data"]
-        print(data)
+        logger.info(data)
 
     def on_message(self, **payload):
         data = payload["data"]
-        print(data['text'])
+        logger.info(data['text'])
 
     def on_goodbye(self, **payload):
         pass
 
     def run(self):
-        print("Waiting for things to happen...")
+        logger.info("Waiting for things to happen...")
         loop = self.future.get_loop()
         # Forever Waiting...
         loop.run_until_complete(self.future)
-        print("Things are now done happening.")
+        logger.info("Things are now done happening.")
 
 
 def main(args):
@@ -83,7 +83,7 @@ def main(args):
 
 if __name__ == '__main__':
     main(sys.argv[1:])
-    print("Program Completed.")
+    logger.info("Program Completed.")
 
 
 # bot_user_token = os.environ["BOT_USER_TOKEN"]
