@@ -21,9 +21,8 @@ if sys.version_info[:3] < 3.5:
 
 BOT_NAME = "al-raasid"
 
+
 # Create module logger from config file
-
-
 def config_logger():
     """Setup logging configuration"""
     with open('logging.yaml') as f:
