@@ -16,7 +16,7 @@ import yaml
 load_dotenv()
 
 # Guard against unsupported/older versions of Python
-if sys.version_info[:3] < 3.5:
+if sys.version_info[0] < 3 and sys.version_info[1] < 5:
     raise RuntimeError("Please use Python 3.5+")
 
 BOT_NAME = "al-raasid"
@@ -54,7 +54,7 @@ class SlackClient:
         # startup our client event loop
         self.future = self.sc.start()
         self.at_bot = f'<@{self.bot_id}>'
-        print("Created new SlackClient Instance")
+        logger.info("Created new SlackClient Instance")
 
     def on_hello(self, **payload):
         data = payload["data"]
