@@ -5,14 +5,13 @@ name = "pypi"
 
 [dev-packages]
 autopep8 = "*"
+"flake8" = "*"
 
 [packages]
 tweepy = "*"
-"flake8" = "*"
 slackclient = "*"
-slack = "*"
-env = "*"
 python-dotenv = "*"
+pyyaml = "*"
 
 [requires]
 python_version = "3.7.5"
