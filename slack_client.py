@@ -14,7 +14,7 @@ import logging.config as lc
 load_dotenv()
 
 # Guard against unsupported/older versions of Python
-if sys.version_info[:1] < 3.5:
+if sys.version_info[:3] < 3.5:
     raise RuntimeError("Please use Python 3.5+")
 
 BOT_NAME = "al-raasid"
