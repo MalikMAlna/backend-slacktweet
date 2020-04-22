@@ -9,7 +9,9 @@ import sys
 from slack.web.client import WebClient
 from slack.rtm.client import RTMClient
 from dotenv import load_dotenv
-import logging.config as lc
+import logging.config as logcon
+from logging import getLogger
+import yaml
 
 load_dotenv()
 
@@ -18,6 +20,19 @@ if sys.version_info[:3] < 3.5:
     raise RuntimeError("Please use Python 3.5+")
 
 BOT_NAME = "al-raasid"
+
+# Create module logger from config file
+
+
+def config_logger():
+    """Setup logging configuration"""
+    with open('logging.yaml') as f:
+        config = yaml.safe_load(f.read())
+        logcon.dictConfig(config)
+    return getLogger(__name__)
+
+
+logger = config_logger()
 
 
 class SlackClient:
