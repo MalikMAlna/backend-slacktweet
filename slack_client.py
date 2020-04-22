@@ -9,6 +9,7 @@ import sys
 from slack.web.client import WebClient
 from slack.rtm.client import RTMClient
 from dotenv import load_dotenv
+import logging.config as lc
 
 load_dotenv()
 
