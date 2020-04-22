@@ -9,7 +9,7 @@ import sys
 from slack.web.client import WebClient
 from slack.rtm.client import RTMClient
 from dotenv import load_dotenv
-import logging.config as logcon
+import logging.config
 from logging import getLogger
 import yaml
 
@@ -27,7 +27,7 @@ def config_logger():
     """Setup logging configuration"""
     with open('logging.yaml') as f:
         config = yaml.safe_load(f.read())
-        logcon.dictConfig(config)
+        logging.config.dictConfig(config)
     return getLogger(__name__)
 
 
