@@ -6,7 +6,8 @@ see https://slack.dev/python-slackclient/
 
 import os
 import sys
-from slackclient import WebClient, RTMClient
+from slack.rtm.client import RTMClient
+from slack.web.client import WebClient
 from dotenv import load_dotenv
 import logging.config
 import logging
@@ -15,8 +16,8 @@ import yaml
 load_dotenv()
 
 # Guard against unsupported/older versions of Python
-if sys.version_info[0] < 3 and sys.version_info[1] < 7:
-    raise RuntimeError("Please use Python 3.7+")
+if sys.version_info[0] < 3 and sys.version_info[1] < 5:
+    raise RuntimeError("Please use Python 3.5+")
 
 BOT_NAME = "al-raasid"
 
