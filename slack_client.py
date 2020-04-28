@@ -16,8 +16,8 @@ import yaml
 load_dotenv()
 
 # Guard against unsupported/older versions of Python
-if sys.version_info[0] < 3 and sys.version_info[1] < 5:
-    raise RuntimeError("Please use Python 3.5+")
+if sys.version_info[0] < 3 and sys.version_info[1] < 7:
+    raise RuntimeError("Please use Python 3.7+")
 
 BOT_NAME = "al-raasid"
 
