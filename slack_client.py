@@ -26,9 +26,9 @@ BOT_CHAN = "bot-safehouse"
 bot_commands = {
     'help':  'Shows this helpful command reference.',
     'ping':  'Show uptime of this bot.',
+    'list':  'List current twitter filters and their counters',
     'exit':  'Shutdown the entire bot (requires app restart)',
     'quit':  'Same as exit.',
-    'list':  'List current twitter filters and their counters',
     'add':  'Add some twitter keyword filters.',
     'del':  'Remove some twitter keyword filters.',
     'clear':  'Remove all twitter filters',
