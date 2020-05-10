@@ -26,7 +26,7 @@ BOT_CHAN = "bot-safehouse"
 # Create module logger from config file
 def config_logger():
     """Setup logging configuration"""
-    with open('logging.yml') as f:
+    with open('logging.yaml') as f:
         config = yaml.safe_load(f.read())
         logging.config.dictConfig(config)
     return logging.getLogger(__name__)
