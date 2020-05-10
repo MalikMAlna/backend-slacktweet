@@ -20,12 +20,13 @@ if sys.version_info[0] < 3 and sys.version_info[1] < 7:
     raise RuntimeError("Please use Python 3.7+")
 
 BOT_NAME = "al-raasid"
+BOT_CHAN = "bot-safehouse"
 
 
 # Create module logger from config file
 def config_logger():
     """Setup logging configuration"""
-    with open('logging.yaml') as f:
+    with open('logging.yml') as f:
         config = yaml.safe_load(f.read())
         logging.config.dictConfig(config)
     return logging.getLogger(__name__)
@@ -67,6 +68,7 @@ class SlackClient:
         logger.info(f"{self} is connected to Slack's RTM server")
         self.post_message(f"{self.name} is now online")
 
+    # Callback Methods
     def on_message(self, **payload):
         data = payload["data"]
         logger.info(data['text'])
@@ -75,7 +77,10 @@ class SlackClient:
         pass
 
     def post_message(self, msg_text, channel=BOT_CHAN):
+        """Sends a message to a Slack channel"""
         pass
+
+    # Waiting for something method
 
     def run(self):
         logger.info("Waiting for things to happen...")
