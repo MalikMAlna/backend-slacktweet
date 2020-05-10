@@ -76,13 +76,13 @@ class SlackClient:
     def on_goodbye(self, **payload):
         pass
 
-    def post_message(self, msg, chan=BOT_CHAN):
+    def post_message(self, msg_text, channel=BOT_CHAN):
         """Sends a message to a Slack channel"""
         assert self.sc._web_client is not None
-        if msg:
+        if msg_text:
             self.sc._web_client.chat_postMessage(
-                channel=chan,
-                text=msg
+                channel=channel,
+                text=msg_text
             )
 
     # Waiting for something method
