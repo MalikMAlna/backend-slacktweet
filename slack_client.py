@@ -78,7 +78,7 @@ class SlackClient:
 
     def post_message(self, msg_text, channel=BOT_CHAN):
         """Sends a message to a Slack channel"""
-        pass
+        assert self.sc._web_client is not None
 
     # Waiting for something method
 
