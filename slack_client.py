@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 import logging.config
 import logging
 import yaml
+import shlex
 
 load_dotenv()
 
@@ -19,8 +20,20 @@ load_dotenv()
 if sys.version_info[0] < 3 and sys.version_info[1] < 7:
     raise RuntimeError("Please use Python 3.7+")
 
+# Globals
 BOT_NAME = "al-raasid"
 BOT_CHAN = "bot-safehouse"
+bot_commands = {
+    'help':  'Shows this helpful command reference.',
+    'ping':  'Show uptime of this bot.',
+    'exit':  'Shutdown the entire bot (requires app restart)',
+    'quit':  'Same as exit.',
+    'list':  'List current twitter filters and their counters',
+    'add':  'Add some twitter keyword filters.',
+    'del':  'Remove some twitter keyword filters.',
+    'clear':  'Remove all twitter filters',
+    'raise':  'Manually test exception handler'
+}
 
 
 # Create module logger from config file
@@ -70,11 +83,38 @@ class SlackClient:
 
     # Callback Methods
     def on_message(self, **payload):
+        """Slack has sent the bot a message"""
         data = payload["data"]
-        logger.info(data['text'])
+        if "text" in data and self.at_bot in data['text']:
+            # parse everything after <@Bot> mention
+            raw_cmd = data["text"].split(self.at_bot)[1].strip().lower()
+            chan = data['channel']
+            # handling cmd
+            response = self.handle_command(raw_cmd, chan)
+            self.post_message(response, chan)
+
+    def handle_command(self, raw_cmd, chan):
+        "Parses a raw_cmd string directed at the bot"
+    #     return "To crush your enemies, to see them driven before you,"
+    # + "and to hear the lamentations of their people!"
+        response = None
+        args = shlex.split(raw_cmd)
+        cmd = args[0].lower()
+        logger.info(f'{self} received command: "{raw_cmd}"')
+        if cmd not in bot_commands:
+            response = f'Unknown Command: "{cmd}"'
+            logger.error(f'{self} {response}')
+        # Now there is a valid command that must be processed
+        elif cmd == 'help':
+            pass
+        elif cmd == 'ping':
+            pass
+        elif cmd == 'list':
+            pass
+        return response
 
     def on_goodbye(self, **payload):
-        pass
+        logger.warning(f"{self} is disconnecting now")
 
     def post_message(self, msg_text, channel=BOT_CHAN):
         """Sends a message to a Slack channel"""
