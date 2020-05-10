@@ -63,14 +63,18 @@ class SlackClient:
         return self.__repr__()
 
     def on_hello(self, **payload):
-        data = payload["data"]
-        logger.info(data)
+        """Slack is confirming our connection request"""
+        logger.info(f"{self} is connected to Slack's RTM server")
+        self.post_message(f"{self.name} is now online")
 
     def on_message(self, **payload):
         data = payload["data"]
         logger.info(data['text'])
 
     def on_goodbye(self, **payload):
+        pass
+
+    def post_message(self, msg_text, channel=BOT_CHAN):
         pass
 
     def run(self):
