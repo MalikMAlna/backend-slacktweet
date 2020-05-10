@@ -56,6 +56,12 @@ class SlackClient:
         self.at_bot = f'<@{self.bot_id}>'
         logger.info("Created new SlackClient Instance")
 
+    def __repr__(self):
+        return self.at_bot
+
+    def __str__(self):
+        return self.__repr__()
+
     def on_hello(self, **payload):
         data = payload["data"]
         logger.info(data)
