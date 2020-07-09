@@ -14,11 +14,11 @@ import logging
 import yaml
 import shlex
 
-load_dotenv()
-
 # Guard against unsupported/older versions of Python
 if sys.version_info[0] < 3 and sys.version_info[1] < 7:
     raise RuntimeError("Please use Python 3.7+")
+
+load_dotenv()
 
 # Globals
 BOT_NAME = "al-raasid"
