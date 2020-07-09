@@ -13,6 +13,7 @@ import logging.config
 import logging
 import yaml
 import shlex
+from datetime import datetime as dt
 
 # Guard against unsupported/older versions of Python
 if sys.version_info[0] < 3 and sys.version_info[1] < 7:
@@ -65,8 +66,9 @@ class SlackClient:
         RTMClient.run_on(event="message")(self.on_message)
         RTMClient.run_on(event="goodbye")(self.on_goodbye)
 
-        # startup our client event loop
+        # Startup our client event loop
         self.future = self.sc.start()
+        self.bot_start = dt.now()
         self.at_bot = f'<@{self.bot_id}>'
         logger.info("Created new SlackClient Instance")
 
@@ -108,7 +110,9 @@ class SlackClient:
         elif cmd == 'help':
             pass
         elif cmd == 'ping':
-            pass
+            response = f"{self.name} is active, current uptime:" + \
+                f" {self.get_uptime()}"
+            logger.info(response)
         elif cmd == 'list':
             pass
         return response
@@ -125,11 +129,15 @@ class SlackClient:
                 text=msg_text
             )
 
+    def get_uptime(self):
+        """Returns the duration for how long this client has been connected"""
+        return dt.now() - self.bot_start
+
     # Waiting for something method
     def run(self):
         logger.info("Waiting for things to happen...")
         loop = self.future.get_loop()
-        # Forever Waiting...
+        # Forever Waiting for a CTRL+C or a SIGTERM or SIGINT
         loop.run_until_complete(self.future)
         logger.info("Things are now done happening.")
 
