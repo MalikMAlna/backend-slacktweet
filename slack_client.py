@@ -37,6 +37,22 @@ bot_commands = {
 }
 
 
+def formatted_dict(d, with_header=False):
+    """Renders contents of a dict into a preformatted string"""
+    if d:
+        # Find the longest key entry in d or the header string
+        width = max(map(len, d))
+        lines = []
+        if with_header:
+            header_key = "Filter Topic"
+            header_val = "Tweet Count:"
+            width = max(width, len(header_key))
+            lines.extend([f'<{header_key:<{width}} : {header_val}'])
+        lines.extend(f'{k:<{width}} : {v}' for k, v in d.items())
+        return "```\n" + '\n'.join(lines) + "\n```"
+    return "```<empty>```"
+
+
 # Create module logger from config file
 def config_logger():
     """Setup logging configuration"""
@@ -108,7 +124,7 @@ class SlackClient:
             logger.error(f'{self} {response}')
         # Now there is a valid command that must be processed
         elif cmd == 'help':
-            pass
+            response = "Available Commands:\n" + formatted_dict(bot_commands)
         elif cmd == 'ping':
             response = f"{self.name} is active, current uptime:" + \
                 f" {self.get_uptime()}"
