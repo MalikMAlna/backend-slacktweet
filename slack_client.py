@@ -14,6 +14,8 @@ import logging
 import yaml
 import shlex
 from datetime import datetime as dt
+import time
+import signal
 
 # Guard against unsupported/older versions of Python
 if sys.version_info[0] < 3 and sys.version_info[1] < 7:
@@ -125,12 +127,22 @@ class SlackClient:
         # Now there is a valid command that must be processed
         elif cmd == 'help':
             response = "Available Commands:\n" + formatted_dict(bot_commands)
+            logger.info(response)
         elif cmd == 'ping':
             response = f"{self.name} is active, current uptime:" + \
                 f" {self.get_uptime()}"
             logger.info(response)
         elif cmd == 'list':
             pass
+        elif cmd == 'exit' or cmd == 'quit':
+            response = f"{self.name} Manual exit request at" + \
+                f"{self.get_uptime()} uptime..."
+            logger.warning(response)
+            # The following is extremely hacky. DO NOT USE IN PRODUCTION!!!
+            self.post_message(response)
+            # Allow some time for sending the impending death message
+            time.sleep(5.0)
+            os.kill(os.getpid(), signal.SIGTERM)
         return response
 
     def on_goodbye(self, **payload):
